@@ -51,14 +51,13 @@ module.exports = function(grunt) {
     },
 
     cssmin: {
-      target: {
-        files: [{
-          expand: true,
-          cwd: 'public',
-          src: ['*.css', '!*.min.css'],
-          dest: 'public/dist',
-          ext: '.min.css'
-        }]
+      options: {
+        keepSpecialComments: 0
+      },
+      dist: {
+        files: {
+          'public/dist/style.min.css': 'public/style.css'
+        }
       }
     },
 
@@ -69,7 +68,6 @@ module.exports = function(grunt) {
           'public/lib/**/*.js',
         ],
         tasks: [
-          'jshint',
           'concat',
           'uglify'
         ]
