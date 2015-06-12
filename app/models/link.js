@@ -1,28 +1,22 @@
 var mongoose = require('mongoose');
-var db = require('../config');
 var crypto = require('crypto');
 
 // db schema urls
-db.urlsSchema = new Schema({
+urlsSchema = mongoose.Schema({
   url: String,
   base_url: String,
   code: String,
   title: String,
   visits: {type: Number, default: 0},
-  timestamps: {
-    createdAt: {type: Date, default: Date.now},
-    modifiedAt: {type: Date, default: Date.now}
-  }
 });
 
-db.urlsSchema.pre('save', function(next){
-  var url = this;
+urlsSchema.pre('save', function(next){
   var shasum = crypto.createHash('sha1');
-  shasum.update(url.url);
-  url.code = shasum.digest('hex').slice(0, 5);
+  shasum.update(this.url);
+  this.code = shasum.digest('hex').slice(0, 5);
   next();
 });
 
-var Link = db.model('Link', db.urlsSchema);
+var Link = mongoose.model('Link', urlsSchema);
 
 module.exports = Link;
